@@ -1,604 +1,488 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#f6f8fc">
-  <meta name="description" content="教學原理課堂報告互評：每週選出欣賞的報告組別，並留下 30 字內心得。">
-  <title>教學原理｜課堂報告互評</title>
-  <style>
-    :root {
-      --ink: #172a44;
-      --muted: #65758a;
-      --line: #e3e9f1;
-      --blue: #315ed7;
-      --blue-soft: #edf3ff;
-      --teal: #087f78;
-      --page: #f6f8fc;
-      --white: #fff;
-      --shadow: 0 18px 55px rgba(24, 46, 78, .065);
-    }
-    * { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
-      background: var(--page);
-      color: var(--ink);
-      line-height: 1.65;
-    }
-    button, textarea { font: inherit; }
-    button { cursor: pointer; }
-    button:focus-visible, textarea:focus-visible, input:focus-visible + .radio-visual {
-      outline: 3px solid rgba(49, 94, 215, .28);
-      outline-offset: 3px;
-    }
-    .wrap { width: min(100% - 36px, 850px); margin-inline: auto; }
-    .site-header {
-      background: #fff;
-      border-bottom: 1px solid var(--line);
-    }
-    .header-content {
-      min-height: 79px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-    }
-    .brand { display: flex; align-items: center; gap: 12px; font-weight: 760; letter-spacing: .015em; }
-    .brand-mark {
-      display: grid;
-      place-items: center;
-      width: 41px;
-      height: 41px;
-      border-radius: 13px;
-      background: #e9efff;
-      color: var(--blue);
-      font-size: 21px;
-    }
-    .header-tag { font-size: 12px; color: var(--muted); white-space: nowrap; }
-    main { padding-top: 31px; padding-bottom: 48px; }
-    .hero {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(125deg, #183253, #203f75 65%, #285887);
-      border-radius: 25px;
-      color: white;
-      padding: 31px 37px 35px;
-      isolation: isolate;
-    }
-    .hero::before, .hero::after {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 50%;
-    }
-    .hero::before { width: 330px; height: 330px; right: -90px; top: -180px; }
-    .hero::after { width: 250px; height: 250px; right: 65px; bottom: -210px; }
-    .eyebrow {
-      color: #acc8ff;
-      font-size: 12px;
-      font-weight: 750;
-      letter-spacing: .11em;
-      margin-bottom: 10px;
-    }
-    .hero h1 { font-size: clamp(25px, 4.5vw, 35px); line-height: 1.4; letter-spacing: .03em; margin: 0 0 10px; }
-    .hero p { margin: 0; color: #d4e0f3; font-size: 14px; max-width: 550px; }
-    .hero-points { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 21px; }
-    .hero-point {
-      border: 1px solid rgba(215, 231, 255, .25);
-      background: rgba(255, 255, 255, .085);
-      padding: 5px 11px;
-      border-radius: 100px;
-      font-size: 12px;
-      color: #f0f6ff;
-    }
-    .section-heading {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 29px 1px 13px;
-    }
-    .section-heading h2 { margin: 0; font-size: 16px; letter-spacing: .015em; }
-    .section-heading p { margin: 0; color: var(--muted); font-size: 12px; }
-    .weeks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
-    .week-tab {
-      background: white;
-      border: 1.5px solid var(--line);
-      border-radius: 15px;
-      padding: 14px 16px 13px;
-      text-align: left;
-      min-height: 108px;
-      color: var(--ink);
-      transition: border-color .2s, box-shadow .2s, transform .2s;
-    }
-    .week-tab:hover { border-color: #b0c3ee; transform: translateY(-1px); }
-    .week-tab.selected { border-color: var(--blue); box-shadow: 0 0 0 3px #e7edff; }
-    .week-tab:disabled { cursor: wait; transform: none; }
-    .week-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-    .week-index { font-weight: 700; color: #8190a4; font-size: 12px; }
-    .week-date { font-weight: 810; font-size: 24px; letter-spacing: -.025em; line-height: 1.4; margin: 4px 0 3px; }
-    .week-state { font-size: 11px; white-space: nowrap; border-radius: 50px; padding: 2px 7px; background: #f0f3f8; color: #768394; }
-    .week-state.open { background: #e6f6f2; color: #087f78; }
-    .week-state.done { background: #e8efff; color: var(--blue); }
-    .card {
-      margin-top: 18px;
-      background: var(--white);
-      border: 1px solid #e7ecf3;
-      border-radius: 21px;
-      box-shadow: var(--shadow);
-      padding: 30px 35px 33px;
-    }
-    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
-    .card-kicker { font-size: 12px; font-weight: 750; color: var(--blue); margin: 0 0 4px; }
-    .card-title { margin: 0; font-size: clamp(19px, 3.6vw, 24px); letter-spacing: -.02em; line-height: 1.5; }
-    .card-desc { margin: 9px 0 22px; color: var(--muted); font-size: 13px; }
-    .status-pill { font-size: 12px; font-weight: 750; white-space: nowrap; padding: 6px 11px; border-radius: 50px; background: #f1f4f9; color: #718094; }
-    .status-pill.open { background: #e6f6f2; color: #087f78; }
-    .form-label { display: block; font-size: 14px; font-weight: 760; margin-bottom: 10px; }
-    .choices { display: grid; gap: 11px; margin-bottom: 25px; }
-    .choice { position: relative; display: block; cursor: pointer; }
-    .choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-    .radio-visual {
-      min-height: 88px;
-      border: 1.5px solid #e0e7f0;
-      border-radius: 14px;
-      padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      transition: background .15s, border-color .15s;
-      background: #fff;
-    }
-    .choice:hover .radio-visual { border-color: #a9bce8; }
-    .choice input:checked + .radio-visual { border-color: var(--blue); background: #f3f7ff; }
-    .choice input:disabled + .radio-visual { opacity: .65; cursor: not-allowed; }
-    .choice input:checked:disabled + .radio-visual { opacity: 1; }
-    .choice-name { display: block; color: var(--muted); font-size: 12px; font-weight: 750; margin-bottom: 3px; }
-    .choice-topic { display: block; color: var(--ink); font-size: 16px; font-weight: 800; }
-    .choice-radio {
-      width: 23px;
-      height: 23px;
-      border-radius: 50%;
-      border: 2px solid #c5cfdd;
-      flex: none;
-      display: grid;
-      place-items: center;
-      background: white;
-    }
-    .choice-radio::after { content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--blue); transform: scale(0); transition: transform .15s; }
-    .choice input:checked + .radio-visual .choice-radio { border-color: var(--blue); }
-    .choice input:checked + .radio-visual .choice-radio::after { transform: scale(1); }
-    .comment-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
-    .count { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-    textarea {
-      display: block;
-      width: 100%;
-      min-height: 100px;
-      resize: vertical;
-      padding: 14px 16px;
-      border-radius: 13px;
-      border: 1.5px solid #dfe6f0;
-      outline: none;
-      background: #fff;
-      color: var(--ink);
-      font-size: 14px;
-      line-height: 1.65;
-    }
-    textarea::placeholder { color: #9aa7b7; }
-    textarea:disabled { background: #f8f9fc; }
-    .form-end {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-top: 19px;
-    }
-    .helper { font-size: 12px; line-height: 1.5; color: var(--muted); max-width: 360px; }
-    .submit-btn {
-      flex: none;
-      border: none;
-      border-radius: 12px;
-      padding: 12px 24px;
-      color: #fff;
-      background: var(--blue);
-      font-weight: 780;
-      font-size: 14px;
-      box-shadow: 0 6px 18px rgba(49, 94, 215, .2);
-      transition: transform .2s, background .2s;
-    }
-    .submit-btn:not(:disabled):hover { background: #244dbb; transform: translateY(-1px); }
-    .submit-btn:disabled { box-shadow: none; background: #b1bfd5; cursor: not-allowed; }
-    .message { display: none; border-radius: 12px; padding: 11px 14px; font-size: 13px; line-height: 1.6; margin-top: 16px; }
-    .message.show { display: block; }
-    .message.info { background: #f0f4fc; color: #365480; }
-    .message.error { background: #fff0ee; color: #a13b33; }
-    .message.success { background: #eaf8f3; color: #0b6958; }
-    .notice {
-      padding: 20px 19px;
-      background: #f7f9fc;
-      border: 1px solid #edf0f6;
-      border-radius: 14px;
-      color: #586b80;
-      font-size: 14px;
-      line-height: 1.8;
-    }
-    .notice strong { display: block; color: var(--ink); font-size: 17px; margin-bottom: 3px; }
-    .notice.success { background: #edf9f4; border-color: #d3eee2; }
-    .notice.success strong { color: #087f78; }
-    .footnote { text-align: center; color: #8995a5; font-size: 12px; margin-top: 24px; }
-    @media(max-width: 620px) {
-      .wrap { width: min(100% - 26px, 850px); }
-      .header-content { min-height: 67px; }
-      .header-tag { display: none; }
-      main { padding-top: 16px; }
-      .hero { padding: 26px 23px 27px; border-radius: 19px; }
-      .weeks { gap: 8px; }
-      .week-tab { padding: 12px 10px; min-height: 107px; border-radius: 12px; }
-      .week-top { display: block; }
-      .week-state { display: inline-block; margin-top: 4px; font-size: 10px; }
-      .week-date { font-size: 21px; margin-top: 2px; }
-      .card { padding: 24px 19px 25px; border-radius: 17px; }
-      .card-top { display: block; }
-      .status-pill { display: inline-block; margin-top: 10px; }
-      .form-end { align-items: stretch; flex-direction: column; }
-      .submit-btn { width: 100%; }
-      .choice-topic { font-size: 15px; }
-    }
-    @media(prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f7fb">
+<meta name="description" content="教學原理三週課堂報告互評：輸入學號姓名、每週選一組與30字心得，回顧自己的歷次回饋。">
+<title>教學原理｜報告互評與心得回顧</title>
+<style>
+:root { --ink:#17304d; --muted:#667991; --line:#e3e9f3; --brand:#315bc5; --brand-dark:#21469f; --teal:#087f78; --paper:#ffffff; --page:#f5f7fb; --soft:#f1f5fc; --shadow:0 16px 48px rgba(18,42,77,.055); }
+* { box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; }
+body { margin:0; min-height:100vh; background:var(--page); color:var(--ink); font:15px/1.65 -apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; }
+button,input,textarea { font:inherit; }
+button { cursor:pointer; }
+button:focus-visible,input:focus-visible,textarea:focus-visible,.choice:focus-within { outline:3px solid #b6caff; outline-offset:2px; }
+[hidden] { display:none !important; }
+.wrap { width:min(100% - 32px,880px); margin-inline:auto; }
+.site-header { border-bottom:1px solid var(--line); background:white; }
+.header-inner { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:74px; }
+.brand { display:flex; align-items:center; gap:11px; font-size:16px; font-weight:820; }
+.brand-icon { width:42px; height:42px; border-radius:14px; background:#edf1ff; display:grid; place-items:center; font-size:21px; color:var(--brand); }
+.header-note { color:var(--muted); font-size:12px; text-align:right; }
+main { padding:29px 0 54px; }
+.hero { position:relative; overflow:hidden; isolation:isolate; border-radius:24px; background:linear-gradient(120deg,#173250 0%,#214579 67%,#276d87 130%); padding:29px 34px 32px; color:#fff; }
+.hero:after { position:absolute; content:""; width:370px; height:370px; border:1px solid #ffffff22; border-radius:50%; right:-125px; top:-180px; z-index:-1; box-shadow:0 0 0 64px #ffffff08,0 0 0 130px #ffffff04; }
+.eyebrow { color:#bed4ff; font-size:11px; font-weight:850; letter-spacing:.13em; }
+.hero h1 { font-size:clamp(23px,4.8vw,34px); line-height:1.42; letter-spacing:.025em; margin:6px 0 9px; }
+.hero p { margin:0; color:#dae5f5; font-size:14px; max-width:570px; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:19px; }
+.chip { border-radius:80px; border:1px solid #ffffff36; background:#ffffff16; padding:5px 11px; font-size:12px; color:#f4f8ff; }
+.card { margin-top:19px; border:1px solid #e4eaf3; box-shadow:var(--shadow); background:var(--paper); border-radius:21px; padding:27px 31px 30px; }
+.card h2 { margin:0 0 4px; font-size:19px; line-height:1.4; }
+.card .sub { margin:0 0 21px; color:var(--muted); font-size:13px; }
+.tagline { color:var(--brand); font-size:11px; font-weight:850; letter-spacing:.09em; margin-bottom:3px; }
+.fields { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.field label { display:block; margin-bottom:7px; font-weight:750; font-size:13px; }
+.field input { width:100%; border:1.5px solid #d6e0ed; background:#fff; border-radius:12px; padding:12px 14px; color:var(--ink); outline:none; min-width:0; }
+.field input::placeholder,textarea::placeholder { color:#95a2b4; }
+.field input:disabled { background:#f4f6f9; }
+.field input:focus,textarea:focus { border-color:#7da2f1; box-shadow:0 0 0 3px #b3c8fc45; }
+.form-bottom { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:16px; }
+.hint { color:var(--muted); font-size:12px; max-width:540px; line-height:1.6; }
+.btn { appearance:none; border:0; border-radius:12px; padding:11px 21px; background:var(--brand); color:white; font-weight:800; font-size:14px; white-space:nowrap; }
+.btn:hover:not(:disabled) { background:var(--brand-dark); }
+.btn:disabled { background:#acbdd7; cursor:not-allowed; }
+.btn.secondary { color:var(--brand); background:#edf2ff; }
+.btn.secondary:hover:not(:disabled) { background:#dce8ff; }
+.status { margin-top:14px; padding:11px 14px; border-radius:12px; font-size:13px; }
+.status.info { background:#edf3ff; color:#315480; }
+.status.error { background:#fff0ed; color:#a93d32; }
+.status.success { background:#e9f8f1; color:#126b58; }
+.current-user { display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; border:1px solid #d9e5f6; border-radius:16px; padding:16px 19px; background:#eff4fd; margin-top:19px; }
+.current-user strong { display:block; font-size:15px; }
+.current-user span { display:block; color:#5d718e; font-size:12px; }
+.section-heading { display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; margin:28px 2px 12px; }
+.section-heading h2 { margin:0; font-size:17px; }
+.section-heading p { margin:0; font-size:12px; color:var(--muted); }
+.weeks { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+.week-tab { text-align:left; color:var(--ink); background:white; border:1.5px solid var(--line); padding:14px 16px 13px; border-radius:14px; transition:border-color .15s,background .15s; min-height:121px; }
+.week-tab:hover:not(:disabled) { border-color:#a8bfec; }
+.week-tab.selected { border-color:var(--brand); box-shadow:0 0 0 3px #e9efff; }
+.week-tab:disabled { cursor:wait; }
+.week-kicker { color:#8091a6; font-size:12px; font-weight:750; }
+.week-date { display:block; font-weight:850; font-size:24px; line-height:1.5; margin:4px 0 2px; }
+.week-state { display:inline-block; font-size:11px; border-radius:50px; padding:2px 8px; color:#718097; background:#f1f3f7; }
+.week-state.open { color:var(--teal); background:#e3f5f0; }
+.week-state.done { color:var(--brand); background:#e7edff; }
+.card-top { display:flex; align-items:start; justify-content:space-between; gap:16px; }
+.card-kicker { color:var(--brand); font-size:12px; font-weight:850; margin-bottom:5px; }
+.card-title { margin:0; font-size:clamp(19px,3vw,23px); }
+.pill { flex:none; border-radius:80px; background:#f1f3f8; color:#64758b; padding:5px 11px; font-size:12px; font-weight:800; }
+.pill.open { background:#e3f5f0; color:var(--teal); }
+.deadline { margin:9px 0 20px; color:#6c7e91; font-size:12px; }
+.form-label { font-weight:830; font-size:14px; margin-bottom:11px; display:block; }
+.choices { display:grid; gap:11px; margin-bottom:23px; }
+.choice { display:block; position:relative; cursor:pointer; }
+.choice input { position:absolute; left:16px; top:16px; opacity:0; width:1px; height:1px; }
+.choice-body { display:flex; align-items:center; justify-content:space-between; gap:15px; border:1.5px solid #dce5f0; border-radius:14px; padding:15px 18px; background:white; min-height:83px; }
+.choice:hover .choice-body { border-color:#b6c9ef; }
+.choice input:checked + .choice-body { border-color:var(--brand); background:#f1f5ff; }
+.choice input:disabled + .choice-body { cursor:wait; }
+.choice-index { display:block; color:#73869f; font-size:12px; font-weight:800; margin-bottom:3px; }
+.choice-topic { display:block; font-size:16px; font-weight:850; }
+.radio-circle { flex:none; width:23px; height:23px; border:2px solid #c4d0df; border-radius:50%; display:grid; place-items:center; background:#fff; }
+.radio-circle:after { content:""; width:11px; height:11px; background:var(--brand); border-radius:50%; transform:scale(0); }
+.choice input:checked + .choice-body .radio-circle { border-color:var(--brand); }
+.choice input:checked + .choice-body .radio-circle:after { transform:scale(1); }
+.comment-head { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+.count { color:#788aa0; font-size:12px; font-variant-numeric:tabular-nums; }
+textarea { display:block; min-height:105px; resize:vertical; width:100%; border-radius:13px; border:1.5px solid #d6e0ed; padding:13px 15px; color:var(--ink); outline:none; }
+.notice { border-radius:14px; padding:16px 18px; color:#52677d; font-size:13px; background:#f5f8fc; border:1px solid #edf0f6; }
+.notice strong { display:block; font-size:15px; color:var(--ink); margin-bottom:4px; }
+.notice.success { background:#eef9f4; border-color:#d4ece2; }
+.notice.success strong { color:#087865; }
+.readonly-comment { margin-top:12px; padding:14px 16px; border-left:3px solid #7ca0e0; background:#f6f9fe; border-radius:0 12px 12px 0; font-size:14px; }
+.history-list { display:grid; gap:11px; }
+.history-item { border:1px solid #e3eaf4; border-radius:15px; padding:15px 18px; }
+.history-head { display:flex; align-items:center; flex-wrap:wrap; gap:9px; font-size:12px; color:#7c8ba0; }
+.history-badge { background:#e9efff; color:#315bc5; border-radius:30px; padding:2px 9px; font-size:11px; font-weight:800; }
+.history-title { margin-top:7px; font-weight:820; font-size:15px; }
+.history-note { margin:6px 0 0; color:#4f6278; font-size:14px; }
+.empty { color:var(--muted); font-size:13px; padding:14px 0 3px; }
+.footnote { text-align:center; color:#8190a2; font-size:12px; margin:25px 0 0; }
+@media(max-width:620px) {
+ .wrap { width:min(100% - 24px,880px); }
+ .header-inner { min-height:66px; }
+ .header-note { display:none; }
+ main { padding-top:16px; }
+ .hero { padding:24px 21px; border-radius:19px; }
+ .card { padding:23px 18px 25px; border-radius:18px; }
+ .fields { grid-template-columns:1fr; gap:12px; }
+ .form-bottom { align-items:stretch; flex-direction:column; }
+ .form-bottom .btn { width:100%; }
+ .weeks { gap:7px; }
+ .week-tab { padding:12px 9px; min-height:116px; border-radius:12px; }
+ .week-date { font-size:20px; }
+ .week-kicker { font-size:11px; }
+ .week-state { font-size:10px; padding:2px 6px; }
+ .choice-topic { font-size:15px; }
+ .card-top { flex-direction:column; gap:9px; }
+}
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none !important; scroll-behavior:auto !important; } }
+</style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="wrap header-content">
-      <div class="brand"><span class="brand-mark" aria-hidden="true">教</span><span>教學原理</span></div>
-      <span class="header-tag">2026 秋季課程 · 課堂報告互評</span>
-    </div>
-  </header>
+<header class="site-header"><div class="wrap header-inner">
+  <div class="brand"><div class="brand-icon" aria-hidden="true">教</div><div>教學原理</div></div>
+  <div class="header-note">2026 秋季課程 · 報告互評與心得回顧</div>
+</div></header>
+<main class="wrap">
+  <section class="hero" aria-labelledby="page-title">
+    <div class="eyebrow">TEACHING PRINCIPLES · PEER FEEDBACK</div>
+    <h1 id="page-title">看見好報告，也留下自己的學習足跡。</h1>
+    <p>每週選出一組你認為表現不錯的報告，留下最多 30 字心得。下週再來，可以回顧自己上次的想法。</p>
+    <div class="chips"><span class="chip">填學號與姓名</span><span class="chip">每週選 1 組</span><span class="chip">心得 30 字內</span><span class="chip">送出後不可修改</span></div>
+  </section>
 
-  <main class="wrap">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="eyebrow">TEACHING PRINCIPLES · PEER FEEDBACK</div>
-      <h1 id="hero-title">每一份精彩報告，都值得被看見。</h1>
-      <p>選出這一週你最欣賞的報告組別，並用一句話分享值得學習的地方。</p>
-      <div class="hero-points" aria-label="填寫說明">
-        <span class="hero-point">每週選 1 組</span>
-        <span class="hero-point">心得最多 30 字</span>
-        <span class="hero-point">不需填寫姓名</span>
+  <section id="identity-card" class="card" aria-labelledby="identity-title">
+    <div class="tagline">STEP 01 · IDENTIFY</div>
+    <h2 id="identity-title">先填寫你的學號與姓名</h2>
+    <p class="sub">填寫後會顯示你的歷次心得，以及目前開放的互評週次。</p>
+    <form id="identity-form" novalidate>
+      <div class="fields">
+        <div class="field"><label for="student-id">學號</label><input id="student-id" name="studentId" type="text" inputmode="text" autocomplete="off" spellcheck="false" maxlength="24" placeholder="請輸入學號" required></div>
+        <div class="field"><label for="student-name">姓名</label><input id="student-name" name="studentName" type="text" autocomplete="name" maxlength="30" placeholder="請輸入完整姓名" required></div>
       </div>
-    </section>
+      <div class="form-bottom"><span class="hint">請使用每週相同的學號與姓名；系統會依所輸入的學號及姓名查詢紀錄。這不是校務系統登入，請勿使用他人資料。</span><button class="btn" type="submit" id="identify-btn">查看我的互評頁面</button></div>
+      <div id="identity-message" class="status" role="status" aria-live="polite" hidden></div>
+    </form>
+  </section>
 
-    <div class="section-heading">
-      <h2>選擇報告週次</h2>
-      <p>依臺灣時間於報告當週開放</p>
-    </div>
-    <nav id="week-tabs" class="weeks" aria-label="報告日期"></nav>
+  <div id="workspace" hidden>
+    <section id="user-banner" class="current-user" aria-label="目前填寫者"></section>
+    <div class="section-heading"><h2>選擇報告週次</h2><p>報告前一天開放 · 報告後一天截止（臺灣時間）</p></div>
+    <nav class="weeks" id="week-tabs" aria-label="報告週次"></nav>
+    <section id="weekly-panel" class="card" aria-live="polite"></section>
+    <section id="history-panel" class="card" aria-labelledby="history-heading"></section>
+  </div>
+  <p class="footnote">此網頁僅供課堂學習回饋使用。請勿代他人填寫，資料由授課教師管理。</p>
+</main>
 
-    <section class="card" id="weekly-panel" aria-live="polite"></section>
-    <p class="footnote">感謝你給予同學具體、友善的回饋 · 資料僅供本課程教學使用</p>
-  </main>
+<!-- Apps Script 使用 HTML form POST 寫入、查詢；隱藏 iframe 傳回執，不需要 CORS 或 API 金鑰。 -->
+<form id="sheet-form" method="POST" target="sheet-frame" aria-hidden="true" style="display:none">
+  <input type="hidden" name="requestId"><input type="hidden" name="action">
+  <input type="hidden" name="studentId"><input type="hidden" name="studentName">
+  <input type="hidden" name="weekId"><input type="hidden" name="groupId"><input type="hidden" name="comment">
+</form>
+<iframe id="sheet-frame" name="sheet-frame" title="互評資料收發" style="display:none"></iframe>
+<script>
+"use strict";
+// 將以下字串換成 Apps Script 部署的 /exec 網址；不要貼 Google Sheet 網址。
+const WEB_APP_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_EXEC_URL_HERE";
+const MESSAGE_SOURCE = "teaching-principles-vote-2026-v2";
+const WEEKS = [
+  {id:"2026-11-23",open:"2026-11-22",end:"2026-11-24",label:"11/23",ordinal:"第一週",groups:[
+    {id:1,topic:"工作分析教學法"},{id:2,topic:"協同教學法"}
+  ]},
+  {id:"2026-12-07",open:"2026-12-06",end:"2026-12-08",label:"12/7",ordinal:"第二週",groups:[
+    {id:3,topic:"探究教學法／講述教學法"},{id:4,topic:"直接教學法"}
+  ]},
+  {id:"2026-12-14",open:"2026-12-13",end:"2026-12-15",label:"12/14",ordinal:"第三週",groups:[
+    {id:5,topic:"討論教學法"},{id:6,topic:"結構式教學法"}
+  ]}
+];
+const state = {
+  identity:null, records:[], weekId:null, choices:{}, drafts:{},
+  sending:false, pending:null, timer:null
+};
+const $ = id => document.getElementById(id);
+const transport = $("sheet-form");
+const identityForm = $("identity-form");
+const panel = $("weekly-panel");
 
-  <!-- This hidden iframe transports an ordinary HTML form POST to Google Apps Script. -->
-  <form id="sheet-form" method="POST" target="sheet-response-frame" style="display:none" aria-hidden="true">
-    <input name="requestId" type="hidden">
-    <input name="weekId" type="hidden">
-    <input name="groupId" type="hidden">
-    <input name="comment" type="hidden">
-  </form>
-  <iframe id="sheet-response-frame" name="sheet-response-frame" title="Google Sheet 資料提交回應" style="display:none"></iframe>
+function escapeHTML(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+}
+function taiwanToday() {
+  const parts = new Intl.DateTimeFormat("en-US", {timeZone:"Asia/Taipei",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
+  const obj = Object.fromEntries(parts.map(p=>[p.type,p.value]));
+  return `${obj.year}-${obj.month}-${obj.day}`;
+}
+function weekStatus(w) {
+  const today = taiwanToday();
+  return today < w.open ? "upcoming" : today > w.end ? "closed" : "open";
+}
+function ownRecord(weekId) { return state.records.find(r => r.weekId === weekId); }
+function currentWeek() { return WEEKS.find(w => w.id === state.weekId) || WEEKS[0]; }
+function statusText(status,completed) {
+  if (completed) return "已填寫";
+  return status === "open" ? "填寫中" : status === "closed" ? "已截止" : "尚未開放";
+}
+function validEndpoint() { return /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec(?:\?.*)?$/.test(WEB_APP_URL); }
+function uniqueId() {
+  if (globalThis.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return Date.now().toString(36)+"-"+Math.random().toString(36).slice(2)+"-"+Math.random().toString(36).slice(2);
+}
+function showMessage(target,kind,message) {
+  const el=$(target);
+  if (!el) return;
+  el.className="status "+kind;
+  el.textContent=message;
+  el.hidden=false;
+}
+function clearMessage(target) { const el=$(target); if (el) el.hidden=true; }
 
-  <script>
-    "use strict";
-
-    // STEP 4: Replace the value below with your deployed Apps Script Web App URL (/exec).
-    const WEB_APP_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_EXEC_URL_HERE";
-
-    // Only the group number and presentation topic are stored here, NOT student names.
-    const WEEKS = [
-      { id: "2026-11-23", end: "2026-11-29", label: "11/23", ordinal: "第一週", groups: [
-        { id: 1, topic: "工作分析教學法" },
-        { id: 2, topic: "協同教學法" }
-      ]},
-      { id: "2026-12-07", end: "2026-12-13", label: "12/7", ordinal: "第二週", groups: [
-        { id: 3, topic: "探究教學法／講述教學法" },
-        { id: 4, topic: "直接教學法" }
-      ]},
-      { id: "2026-12-14", end: "2026-12-20", label: "12/14", ordinal: "第三週", groups: [
-        { id: 5, topic: "討論教學法" },
-        { id: 6, topic: "結構式教學法" }
-      ]}
-    ];
-
-    const MESSAGE_SOURCE = "teaching-principles-vote-2026";
-    const STORE_PREFIX = "teaching-principles-vote-2026-";
-    const state = {
-      weekId: null,
-      choices: {},
-      drafts: {},
-      completed: {},
-      sending: false,
-      pendingAttempt: null,
-      responseTimer: null
-    };
-    const tabsNode = document.getElementById("week-tabs");
-    const panelNode = document.getElementById("weekly-panel");
-    const transportForm = document.getElementById("sheet-form");
-
-    function taiwanDate() {
-      const pieces = new Intl.DateTimeFormat("en-US", {
-        timeZone: "Asia/Taipei", year: "numeric", month: "2-digit", day: "2-digit"
-      }).formatToParts(new Date());
-      const dict = Object.fromEntries(pieces.map(p => [p.type, p.value]));
-      return `${dict.year}-${dict.month}-${dict.day}`;
-    }
-
-    function weekStatus(week) {
-      const today = taiwanDate();
-      if (today < week.id) return "upcoming";
-      if (today > week.end) return "closed";
-      return "open";
-    }
-
-    function hasCompleted(weekId) {
-      if (state.completed[weekId]) return true;
-      try { return localStorage.getItem(STORE_PREFIX + weekId) === "submitted"; }
-      catch (_) { return false; }
-    }
-
-    function setCompleted(weekId) {
-      state.completed[weekId] = true;
-      try { localStorage.setItem(STORE_PREFIX + weekId, "submitted"); }
-      catch (_) { /* Browsers may disable local storage. */ }
-    }
-
-    function statusText(status, completed) {
-      if (completed) return "已填寫";
-      if (status === "open") return "填寫中";
-      return status === "closed" ? "已截止" : "尚未開放";
-    }
-
-    function initializeWeek() {
-      const preferred = WEEKS.find(w => weekStatus(w) === "open" && !hasCompleted(w.id))
-        || WEEKS.find(w => weekStatus(w) === "open")
-        || WEEKS.find(w => weekStatus(w) === "upcoming")
-        || WEEKS[WEEKS.length - 1];
-      state.weekId = preferred.id;
-    }
-
-    function currentWeek() { return WEEKS.find(w => w.id === state.weekId); }
-
-    function renderTabs() {
-      tabsNode.replaceChildren();
-      for (const week of WEEKS) {
-        const selected = week.id === state.weekId;
-        const status = weekStatus(week);
-        const completed = hasCompleted(week.id);
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = `week-tab${selected ? " selected" : ""}`;
-        button.setAttribute("aria-pressed", String(selected));
-        button.disabled = state.sending || Boolean(state.pendingAttempt);
-        button.innerHTML = `
-          <span class="week-top"><span class="week-index">${week.ordinal}</span></span>
-          <span class="week-date">${week.label}</span>
-          <span class="week-state ${completed ? "done" : (status === "open" ? "open" : "")}">${statusText(status, completed)}</span>`;
-        button.addEventListener("click", () => {
-          if (state.sending || state.pendingAttempt) return;
-          state.weekId = week.id;
-          render();
-        });
-        tabsNode.appendChild(button);
-      }
-    }
-
-    function renderPanel() {
-      const week = currentWeek();
-      const status = weekStatus(week);
-      const completed = hasCompleted(week.id);
-      const isOpen = status === "open";
-      let inner = `
-        <div class="card-top">
-          <div>
-            <p class="card-kicker">${week.ordinal} · ${week.label}（週一）</p>
-            <h2 class="card-title">本週報告互評</h2>
-          </div>
-          <span class="status-pill ${isOpen && !completed ? "open" : ""}">${statusText(status, completed)}</span>
-        </div>`;
-
-      if (completed) {
-        inner += `<p class="card-desc">本週的互評已完成。</p>
-          <div class="notice success"><strong>✓ 感謝你的回饋！</strong>本週已完成填寫。歡迎在下一個報告週次繼續參與互評。</div>`;
-        panelNode.innerHTML = inner;
-        return;
-      }
-
-      if (!isOpen) {
-        const description = status === "upcoming"
-          ? `請於 ${week.label}（週一）至當週週日進行互評。你可以先查看本週報告主題。`
-          : `本週互評已於 ${week.end.replaceAll("-", "/")} 23:59（臺灣時間）截止。`;
-        inner += `<p class="card-desc">${description}</p>`;
-        inner += `<div class="choices" aria-label="本週報告主題">` + week.groups.map(group => `
-          <div class="radio-visual">
-            <div><span class="choice-name">第 ${group.id} 組</span><span class="choice-topic">${group.topic}</span></div>
-          </div>`).join("") + `</div>`;
-        inner += `<div class="notice"><strong>${status === "upcoming" ? "尚未開始填寫" : "已結束填寫"}</strong>${description}</div>`;
-        panelNode.innerHTML = inner;
-        return;
-      }
-
-      inner += `
-        <p class="card-desc">請選擇你認為本週表現最好的報告組別，並留下簡短的欣賞理由。</p>
-        <form id="vote-form" novalidate>
-          <div class="form-label" id="vote-label">01　選擇一個報告組別</div>
-          <div class="choices" role="radiogroup" aria-labelledby="vote-label">
-            ${week.groups.map(group => `
-              <label class="choice">
-                <input type="radio" name="voteChoice" value="${group.id}" ${state.choices[week.id] === group.id ? "checked" : ""}>
-                <span class="radio-visual">
-                  <span><span class="choice-name">第 ${group.id} 組</span><span class="choice-topic">${group.topic}</span></span>
-                  <span class="choice-radio" aria-hidden="true"></span>
-                </span>
-              </label>`).join("")}
-          </div>
-          <div class="comment-top">
-            <label class="form-label" for="vote-comment">02　給這組一句心得</label>
-            <span class="count" id="comment-count">0 / 30 字</span>
-          </div>
-          <textarea id="vote-comment" rows="3" placeholder="例如：教學步驟很清楚，示範容易理解" aria-describedby="comment-count"></textarea>
-          <div class="form-end">
-            <span class="helper">只需選組別、寫心得。無須填姓名；請依實際報告內容給予友善回饋。</span>
-            <button id="submit-btn" class="submit-btn" type="submit" disabled>送出本週互評</button>
-          </div>
-          <div id="form-message" class="message" role="status" aria-live="polite"></div>
-        </form>`;
-      panelNode.innerHTML = inner;
-
-      const voteForm = document.getElementById("vote-form");
-      const comment = document.getElementById("vote-comment");
-      comment.value = state.drafts[week.id] || "";
-      voteForm.addEventListener("change", event => {
-        if (event.target.name === "voteChoice") {
-          state.choices[week.id] = Number(event.target.value);
-          syncSubmitState();
-        }
-      });
-      comment.addEventListener("input", () => {
-        // Count visible Unicode characters instead of UTF-16 code units.
-        const chars = Array.from(comment.value);
-        if (chars.length > 30) comment.value = chars.slice(0, 30).join("");
-        state.drafts[week.id] = comment.value;
-        document.getElementById("comment-count").textContent = `${Array.from(comment.value).length} / 30 字`;
-        syncSubmitState();
-      });
-      voteForm.addEventListener("submit", handleSubmit);
-      document.getElementById("comment-count").textContent = `${Array.from(comment.value).length} / 30 字`;
-      syncSubmitState();
-    }
-
-    function syncSubmitState() {
-      const button = document.getElementById("submit-btn");
-      const comment = document.getElementById("vote-comment");
-      if (!button || !comment) return;
-      const locked = state.sending || Boolean(state.pendingAttempt);
-      const week = currentWeek();
-      for (const choice of document.querySelectorAll('input[name="voteChoice"]')) choice.disabled = locked;
-      comment.disabled = locked;
-      if (state.sending) {
-        button.disabled = true;
-        button.textContent = "正在送出…";
-      } else if (state.pendingAttempt) {
-        button.disabled = false;
-        button.textContent = "再次確認送出";
-      } else {
-        const validChoice = week.groups.some(g => g.id === state.choices[week.id]);
-        const length = Array.from((comment.value || "").replace(/\s+/g, " ").trim()).length;
-        button.disabled = !validChoice || length < 1 || length > 30 || weekStatus(week) !== "open";
-        button.textContent = "送出本週互評";
-      }
-    }
-
-    function showMessage(kind, text) {
-      const message = document.getElementById("form-message");
-      if (!message) return;
-      message.className = `message show ${kind}`;
-      message.textContent = text;
-    }
-
-    function isConfigured() {
-      return WEB_APP_URL.startsWith("https://script.google.com/") && WEB_APP_URL.includes("/exec");
-    }
-
-    function uniqueId() {
-      if (globalThis.crypto && typeof crypto.randomUUID === "function") return crypto.randomUUID();
-      return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
-    }
-
-    function handleSubmit(event) {
-      event.preventDefault();
-      if (state.sending) return;
-      if (state.pendingAttempt) { sendAttempt(state.pendingAttempt); return; }
-      if (!isConfigured()) {
-        showMessage("error", "網站尚未連接 Google Sheet，請通知授課教師設定 Apps Script 網址。");
-        return;
-      }
-      const week = currentWeek();
-      if (weekStatus(week) !== "open") {
-        showMessage("error", "目前不在本週的開放期間，請重新選擇週次。");
-        return;
-      }
-      const groupId = state.choices[week.id];
-      const comment = (state.drafts[week.id] || "").replace(/\s+/g, " ").trim();
-      if (!week.groups.some(g => g.id === groupId) || Array.from(comment).length < 1 || Array.from(comment).length > 30) {
-        showMessage("error", "請選擇一個組別，並填寫 1 至 30 字的心得。");
-        return;
-      }
-      state.pendingAttempt = { requestId: uniqueId(), weekId: week.id, groupId, comment };
-      sendAttempt(state.pendingAttempt);
-    }
-
-    function sendAttempt(attempt) {
-      if (!isConfigured()) { showMessage("error", "請通知授課教師設定 Apps Script 網址。"); return; }
-      state.sending = true;
-      renderTabs();
-      syncSubmitState();
-      showMessage("info", "正在將互評寫入 Google Sheet，請勿關閉網頁。");
-      transportForm.action = WEB_APP_URL;
-      for (const key of ["requestId", "weekId", "groupId", "comment"]) {
-        transportForm.elements.namedItem(key).value = attempt[key];
-      }
-      try { transportForm.submit(); }
-      catch (_) {
-        state.sending = false;
-        state.pendingAttempt = null;
-        renderTabs();
-        syncSubmitState();
-        showMessage("error", "表單無法送出，請確認網路連線後重試。");
-        return;
-      }
-      clearTimeout(state.responseTimer);
-      state.responseTimer = setTimeout(() => {
-        if (!state.pendingAttempt || state.pendingAttempt.requestId !== attempt.requestId) return;
-        state.sending = false;
-        renderTabs();
-        syncSubmitState();
-        showMessage("error", "目前無法確認 Sheet 是否已收到。請先確認網路，再點「再次確認送出」；相同提交編號不會重複寫入。若持續發生，請聯絡老師。");
-      }, 18000);
-    }
-
-    window.addEventListener("message", event => {
-      const allowed = event.origin === "https://script.google.com"
-        || /^https:\/\/([a-z0-9-]+\.)*googleusercontent\.com$/i.test(event.origin);
-      if (!allowed) return;
-      const reply = event.data;
-      if (!reply || typeof reply !== "object" || reply.source !== MESSAGE_SOURCE) return;
-      if (!state.pendingAttempt || reply.requestId !== state.pendingAttempt.requestId) return;
-      clearTimeout(state.responseTimer);
-      state.responseTimer = null;
-      state.sending = false;
-      const attempt = state.pendingAttempt;
-      if (reply.ok === true) {
-        setCompleted(attempt.weekId);
-        state.pendingAttempt = null;
-        render();
-      } else {
-        state.pendingAttempt = null;
-        renderTabs();
-        syncSubmitState();
-        showMessage("error", reply.message || "無法完成送出，請再試一次。");
-      }
+function renderBanner() {
+  const {studentId,studentName} = state.identity;
+  $("user-banner").innerHTML = `
+    <div><strong>${escapeHTML(studentName)}，歡迎回來！</strong>
+    <span>學號：${escapeHTML(studentId)} · 目前為你的個人互評紀錄</span></div>
+    <button type="button" class="btn secondary" id="switch-user">切換填寫者</button>`;
+  $("switch-user").addEventListener("click", () => {
+    if (state.sending || state.pending) return;
+    state.identity=null; state.records=[]; state.choices={}; state.drafts={};
+    $("workspace").hidden=true;
+    $("identity-card").hidden=false;
+    $("student-id").value="";
+    $("student-name").value="";
+    clearMessage("identity-message");
+    $("student-id").focus();
+  });
+}
+function preferredWeek() {
+  return WEEKS.find(w=>weekStatus(w)==="open"&&!ownRecord(w.id))
+    || WEEKS.find(w=>weekStatus(w)==="open")
+    || WEEKS.find(w=>weekStatus(w)==="upcoming")
+    || WEEKS[WEEKS.length-1];
+}
+function renderTabs() {
+  const tabs=$("week-tabs");
+  tabs.replaceChildren();
+  for (const week of WEEKS) {
+    const st=weekStatus(week), done=!!ownRecord(week.id);
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="week-tab"+(state.weekId===week.id?" selected":"");
+    button.setAttribute("aria-pressed",String(state.weekId===week.id));
+    button.disabled=state.sending||!!state.pending;
+    button.innerHTML=`<span class="week-kicker">${week.ordinal}</span>
+      <span class="week-date">${week.label}</span>
+      <span class="week-state ${done?"done":(st==="open"?"open":"")}">${statusText(st,done)}</span>`;
+    button.addEventListener("click",()=>{
+      if (state.sending||state.pending) return;
+      state.weekId=week.id; render();
     });
+    tabs.appendChild(button);
+  }
+}
+function groupCards(week,interactive) {
+  return week.groups.map(group=>interactive?`
+    <label class="choice"><input name="selectedGroup" type="radio" value="${group.id}" ${state.choices[week.id]===group.id?"checked":""}>
+      <span class="choice-body"><span><span class="choice-index">第 ${group.id} 組</span>
+      <span class="choice-topic">${escapeHTML(group.topic)}</span></span><span class="radio-circle" aria-hidden="true"></span></span>
+    </label>`:`
+    <div class="choice-body"><span><span class="choice-index">第 ${group.id} 組</span>
+    <span class="choice-topic">${escapeHTML(group.topic)}</span></span></div>`).join("");
+}
+function renderWeekly() {
+  const week=currentWeek(), st=weekStatus(week), record=ownRecord(week.id);
+  const dateLabel=week.open.replaceAll("-","/")+" 00:00 ～ "+week.end.replaceAll("-","/")+" 23:59";
+  let html=`<div class="card-top"><div><div class="card-kicker">${week.ordinal} · ${week.label}（週一）</div>
+    <h2 class="card-title">本週報告互評</h2></div>
+    <span class="pill ${st==="open"&&!record?"open":""}">${statusText(st,!!record)}</span></div>
+    <div class="deadline">開放期間：${dateLabel}（臺灣時間）</div>`;
+  if (record) {
+    html+=`<div class="notice success"><strong>✓ 本週已完成提交</strong>
+      這是你當時的原始回覆。送出後無法變更組別或修改心得。</div>
+      <div class="history-title" style="margin-top:17px">${escapeHTML(record.groupLabel)} · ${escapeHTML(record.topic)}</div>
+      <div class="readonly-comment">${escapeHTML(record.comment)}</div>
+      <div class="deadline" style="margin-bottom:0">提交時間：${escapeHTML(record.submittedAt)}</div>`;
+  } else if (st!=="open") {
+    html+=`<div class="choices">${groupCards(week,false)}</div>
+      <div class="notice"><strong>${st==="upcoming"?"尚未開放":"已截止"}</strong>
+      ${st==="upcoming"?"你可以先查看本週報告主題，開放後再回來填寫。":"填寫期間已結束，本週不再接受新回覆。"}</div>`;
+  } else {
+    html+=`<p class="sub">請選擇你認為本週報告表現不錯的一組，並用一句話說明值得學習之處。</p>
+    <form id="vote-form" novalidate>
+      <label class="form-label" id="group-label">01　選擇一個報告組別</label>
+      <div class="choices" role="radiogroup" aria-labelledby="group-label">${groupCards(week,true)}</div>
+      <div class="comment-head"><label class="form-label" for="vote-comment">02　寫下一句心得</label><span class="count" id="char-count">0 / 30 字</span></div>
+      <textarea id="vote-comment" placeholder="例如：步驟示範清楚，也能結合實際教學情境" rows="3" aria-describedby="char-count"></textarea>
+      <div class="form-bottom"><span class="hint">每個學號每週限填一次。按下送出後即鎖定，不可返回更改。</span>
+      <button type="submit" class="btn" id="submit-btn" disabled>送出本週互評</button></div>
+      <div id="vote-message" class="status" role="status" aria-live="polite" hidden></div>
+    </form>`;
+  }
+  panel.innerHTML=html;
+  const form=$("vote-form");
+  if (!form) return;
+  const comment=$("vote-comment");
+  comment.value=state.drafts[week.id]||"";
+  form.querySelectorAll('input[name="selectedGroup"]').forEach(input=>input.addEventListener("change",()=>{
+    state.choices[week.id]=Number(input.value);
+    updateVoteButton();
+  }));
+  comment.addEventListener("input",()=>{
+    let chars=Array.from(comment.value);
+    if (chars.length>30) { comment.value=chars.slice(0,30).join(""); chars=chars.slice(0,30); }
+    state.drafts[week.id]=comment.value;
+    $("char-count").textContent=chars.length+" / 30 字";
+    updateVoteButton();
+  });
+  form.addEventListener("submit",handleVote);
+  $("char-count").textContent=Array.from(comment.value).length+" / 30 字";
+  updateVoteButton();
+}
+function renderHistory() {
+  const box=$("history-panel");
+  let html=`<div class="tagline">MY LEARNING NOTES</div><h2 id="history-heading">我的歷次互評心得</h2>
+    <p class="sub">只顯示你自己已送出的紀錄，所有心得均為唯讀。</p>`;
+  if (state.records.length===0) {
+    html+=`<div class="empty">目前尚未有任何互評紀錄。完成第一次填寫後，就會在這裡看到心得。</div>`;
+  } else {
+    html+=`<div class="history-list">`+state.records.map(r=>{
+      const week=WEEKS.find(w=>w.id===r.weekId);
+      return `<article class="history-item"><div class="history-head">
+        <span class="history-badge">${escapeHTML(r.weekLabel||week?.ordinal||"已提交")}</span>
+        <span>報告日期：${escapeHTML(r.weekId||"")}</span>
+        <span>提交：${escapeHTML(r.submittedAt||"")}</span></div>
+        <div class="history-title">${escapeHTML(r.groupLabel)} · ${escapeHTML(r.topic)}</div>
+        <p class="history-note">${escapeHTML(r.comment)}</p></article>`;
+    }).join("")+`</div>`;
+  }
+  box.innerHTML=html;
+}
+function render() {
+  if (!state.identity) return;
+  renderBanner(); renderTabs(); renderWeekly(); renderHistory();
+}
+function updateVoteButton() {
+  const btn=$("submit-btn"),comment=$("vote-comment");
+  if (!btn||!comment) return;
+  const week=currentWeek(), selected=state.choices[week.id];
+  const validChoice=week.groups.some(g=>g.id===selected);
+  const count=Array.from(comment.value.replace(/\s+/g," ").trim()).length;
+  const locked=state.sending||!!state.pending;
+  panel.querySelectorAll('input[name="selectedGroup"]').forEach(input=>input.disabled=locked);
+  comment.disabled=locked;
+  if (state.sending) { btn.disabled=true; btn.textContent="正在處理…"; }
+  else if (state.pending&&state.pending.action==="submit") { btn.disabled=false; btn.textContent="再次確認送出"; }
+  else {
+    btn.disabled=!validChoice||count<1||count>30||weekStatus(week)!=="open";
+    btn.textContent="送出本週互評";
+  }
+}
 
-    function render() { renderTabs(); renderPanel(); }
-    initializeWeek();
+function updateIdentityButton() {
+  const busy=state.sending||!!state.pending;
+  $("student-id").disabled=busy;
+  $("student-name").disabled=busy;
+  $("identify-btn").disabled=busy;
+  $("identify-btn").textContent=busy?"正在查詢…":"查看我的互評頁面";
+}
+function startAttempt(attempt) {
+  state.pending=attempt;
+  sendAttempt(attempt);
+}
+function sendAttempt(attempt) {
+  if (!validEndpoint()) {
+    state.pending=null;
+    const dest=attempt.action==="lookup"?"identity-message":"vote-message";
+    showMessage(dest,"error","網頁尚未連接 Google Sheet，請授課教師設定 Apps Script 的 /exec 網址。");
+    updateIdentityButton(); updateVoteButton();
+    return;
+  }
+  state.sending=true;
+  updateIdentityButton();
+  if (state.identity) { renderTabs(); updateVoteButton(); }
+  showMessage(attempt.action==="lookup"?"identity-message":"vote-message","info",
+    attempt.action==="lookup"?"正在讀取你的歷次互評紀錄…":"正在寫入 Google Sheet，請不要關閉這個頁面…");
+  transport.action=WEB_APP_URL;
+  for (const key of ["requestId","action","studentId","studentName","weekId","groupId","comment"]) {
+    transport.elements.namedItem(key).value=String(attempt[key]??"");
+  }
+  try { transport.submit(); }
+  catch (_) {
+    state.sending=false; state.pending=null;
+    updateIdentityButton(); if (state.identity) { renderTabs(); updateVoteButton(); }
+    showMessage(attempt.action==="lookup"?"identity-message":"vote-message","error","表單無法傳送，請確認網路連線並重試。");
+    return;
+  }
+  clearTimeout(state.timer);
+  state.timer=setTimeout(()=>{
+    if (!state.pending||state.pending.requestId!==attempt.requestId) return;
+    state.sending=false;
+    if (attempt.action==="lookup") state.pending=null;
+    updateIdentityButton();
+    if (state.identity) { renderTabs(); updateVoteButton(); }
+    const text=attempt.action==="lookup"
+      ? "無法取得查詢結果，請檢查網路連線後重試。"
+      : "尚未確認 Sheet 是否收到。請點「再次確認送出」；系統會使用同一提交編號，不會重複寫入。";
+    showMessage(attempt.action==="lookup"?"identity-message":"vote-message","error",text);
+  },20000);
+}
+
+identityForm.addEventListener("submit", event=>{
+  event.preventDefault();
+  if (state.sending||state.pending) return;
+  const studentId=$("student-id").value.trim().toUpperCase();
+  const studentName=$("student-name").value.replace(/\s+/g,"").trim();
+  if (!/^[A-Z0-9-]{4,24}$/.test(studentId)) {
+    showMessage("identity-message","error","請輸入 4 至 24 位英數字或連字號的學號。"); return;
+  }
+  if (Array.from(studentName).length<2||Array.from(studentName).length>30) {
+    showMessage("identity-message","error","請輸入完整姓名。"); return;
+  }
+  clearMessage("identity-message");
+  startAttempt({requestId:uniqueId(),action:"lookup",studentId,studentName});
+});
+function handleVote(event) {
+  event.preventDefault();
+  if (state.sending) return;
+  if (state.pending) {
+    if (state.pending.action==="submit") sendAttempt(state.pending);
+    return;
+  }
+  const week=currentWeek();
+  if (ownRecord(week.id)) {
+    showMessage("vote-message","error","你已經填寫本週互評，不能再送一次。");return;
+  }
+  if (weekStatus(week)!=="open") {
+    showMessage("vote-message","error","本週已截止或尚未開放，請確認日期。");return;
+  }
+  const groupId=state.choices[week.id];
+  const comment=(state.drafts[week.id]||"").replace(/\s+/g," ").trim();
+  if (!week.groups.some(g=>g.id===groupId)||Array.from(comment).length<1||Array.from(comment).length>30) {
+    showMessage("vote-message","error","請選擇一組，並填寫 1 至 30 字心得。");return;
+  }
+  // 本週心得送出前提醒：避免不慎點到即鎖定。不同週次不受影響。
+  const group=week.groups.find(g=>g.id===groupId);
+  if (!window.confirm(`確定送出「第 ${group.id} 組 · ${group.topic}」的心得嗎？\n送出後不能修改。`)) return;
+  clearMessage("vote-message");
+  startAttempt({requestId:uniqueId(),action:"submit",
+    studentId:state.identity.studentId,studentName:state.identity.studentName,
+    weekId:week.id,groupId,comment});
+}
+window.addEventListener("message",event=>{
+  const allowed=event.origin==="https://script.google.com"||/^https:\/\/([a-z0-9-]+\.)*googleusercontent\.com$/i.test(event.origin);
+  if (!allowed) return;
+  const reply=event.data, attempt=state.pending;
+  if (!reply||typeof reply!=="object"||reply.source!==MESSAGE_SOURCE||!attempt) return;
+  if (reply.requestId!==attempt.requestId||reply.action!==attempt.action) return;
+  clearTimeout(state.timer); state.timer=null;
+  state.sending=false; state.pending=null;
+  updateIdentityButton();
+  if (reply.ok!==true) {
+    if (state.identity) { renderTabs(); updateVoteButton(); }
+    showMessage(attempt.action==="lookup"?"identity-message":"vote-message","error",
+      reply.message||"作業未完成，請稍後再試。");
+    return;
+  }
+  const records=Array.isArray(reply.records)?reply.records:[];
+  if (attempt.action==="lookup") {
+    state.identity={studentId:attempt.studentId,studentName:attempt.studentName};
+    state.records=records;
+    state.weekId=preferredWeek().id;
+    $("identity-card").hidden=true;
+    $("workspace").hidden=false;
     render();
-  </script>
+  } else {
+    state.records=records;
+    render();
+  }
+});
+</script>
 </body>
 </html>
