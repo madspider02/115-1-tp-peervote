@@ -126,7 +126,7 @@ textarea { display:block; min-height:105px; resize:vertical; width:100%; border-
 <body>
 <header class="site-header"><div class="wrap header-inner">
   <div class="brand"><div class="brand-icon" aria-hidden="true">教</div><div>教學原理</div></div>
-  <div class="header-note">2026 秋季課程 · 報告互評與心得回顧</div>
+  <div class="header-note">2026 秋季課程 · v3 學號姓名／跨週心得版</div>
 </div></header>
 <main class="wrap">
   <section class="hero" aria-labelledby="page-title">
@@ -160,6 +160,7 @@ textarea { display:block; min-height:105px; resize:vertical; width:100%; border-
   <p class="footnote">此網頁僅供課堂學習回饋使用。請勿代他人填寫，資料由授課教師管理。</p>
 </main>
 
+<!-- VERSION: 2026-11-22 v3. 學號姓名查詢 + 跨週唯讀回顧 + 三週開放時程。 -->
 <!-- Apps Script 使用 HTML form POST 寫入、查詢；隱藏 iframe 傳回執，不需要 CORS 或 API 金鑰。 -->
 <form id="sheet-form" method="POST" target="sheet-frame" aria-hidden="true" style="display:none">
   <input type="hidden" name="requestId"><input type="hidden" name="action">
@@ -171,7 +172,7 @@ textarea { display:block; min-height:105px; resize:vertical; width:100%; border-
 "use strict";
 // 將以下字串換成 Apps Script 部署的 /exec 網址；不要貼 Google Sheet 網址。
 const WEB_APP_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_EXEC_URL_HERE";
-const MESSAGE_SOURCE = "teaching-principles-vote-2026-v2";
+const MESSAGE_SOURCE = "teaching-principles-vote-2026-v3";
 const WEEKS = [
   {id:"2026-11-23",open:"2026-11-22",end:"2026-11-24",label:"11/23",ordinal:"第一週",groups:[
     {id:1,topic:"工作分析教學法"},{id:2,topic:"協同教學法"}
