@@ -1,28 +1,33 @@
 <!doctype html>
-<html lang="zh-Hant">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f5f7fb">
-<title>教學原理｜課堂報告互評</title>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f7fb"><meta name="referrer" content="no-referrer">
+<meta http-equiv="refresh" content="3;url=https://script.google.com/macros/s/AKfycbw_CMxDIgfxnyxX1r8PY20Z-sSD0Gq-60e5B7ws99bk7mLxNMpUphwgQ86ulQDTVmmg6w/exec"><title>教學原理｜報告互評與心得回顧</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#203b5b;font:15px/1.6 -apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif}
-header{background:#fff;border-bottom:1px solid #e1e8f1;padding:14px 18px;font-weight:750}main{max-width:980px;margin:0 auto}iframe{display:block;border:0;width:100%;height:1350px;background:#f5f7fb}
-footer{text-align:center;font-size:13px;color:#61748b;padding:12px 16px 24px}a{color:#244eb1}
-</style>
-</head>
-<body>
-<header>教學原理　｜　跨週次報告互評</header>
-<main>
-  <iframe id="app" title="教學原理互評表" src="https://script.google.com/macros/s/AKfycbw_CMxDIgfxnyxX1r8PY20Z-sSD0Gq-60e5B7ws99bk7mLxNMpUphwgQ86ulQDTVmmg6w/exec" referrerpolicy="no-referrer" allow="clipboard-write"></iframe>
-  <footer>如果網頁內無法操作，請 <a href="https://script.google.com/macros/s/AKfycbw_CMxDIgfxnyxX1r8PY20Z-sSD0Gq-60e5B7ws99bk7mLxNMpUphwgQ86ulQDTVmmg6w/exec" target="_blank" rel="noopener noreferrer">直接開啟互評表</a>。</footer>
-</main>
-<script>
-window.addEventListener('message',function(event){
- // GAS HtmlService 可能有額外巢狀 iframe，因此僅驗證訊息來源網域。
- if(!/^https:\/\/(script\.google\.com|([a-z0-9-]+\.)*googleusercontent\.com)$/i.test(event.origin))return;
- if(event.data&&event.data.type==='tpv5-height'&&Number.isFinite(event.data.height)){
-  document.getElementById('app').style.height=Math.min(3000,Math.max(700,event.data.height))+'px';
- }
-});
-</script>
+:root{--ink:#17304d;--muted:#667991;--line:#e3e9f3;--brand:#315bc5;--page:#f5f7fb}
+*{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--ink);font:15px/1.65 -apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+.wrap{width:min(100% - 32px,880px);margin-inline:auto}
+header{border-bottom:1px solid var(--line);background:#fff}.head{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;gap:11px;align-items:center;font-size:16px;font-weight:820}.mark{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#edf1ff;color:var(--brand);font-size:21px}
+.small{color:var(--muted);font-size:12px}
+main{padding:29px 0 54px}.hero{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(120deg,#173250 0%,#214579 67%,#276d87 130%);padding:29px 34px 32px;color:#fff}
+.hero::after{position:absolute;content:"";width:370px;height:370px;border:1px solid #ffffff22;border-radius:50%;right:-125px;top:-180px;box-shadow:0 0 0 64px #ffffff08,0 0 0 130px #ffffff04}
+.eyebrow{color:#bed4ff;font-size:11px;font-weight:850;letter-spacing:.13em}.hero h1{font-size:clamp(23px,4.8vw,34px);line-height:1.42;margin:6px 0 9px}.hero p{margin:0;color:#dae5f5;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:19px}.chip{border-radius:80px;border:1px solid #ffffff36;background:#ffffff16;padding:5px 11px;font-size:12px}
+.card{margin-top:19px;border:1px solid #e4eaf3;box-shadow:0 16px 48px rgba(18,42,77,.055);background:#fff;border-radius:21px;padding:27px 31px 30px}
+.card h2{font-size:19px;margin:0 0 6px}.card p{color:var(--muted);font-size:13px;max-width:590px}
+.btn{display:inline-block;border-radius:12px;padding:12px 21px;background:var(--brand);color:#fff;text-decoration:none;font-size:14px;font-weight:800;margin-top:8px}
+.btn:hover,.btn:focus-visible{background:#21469f}.foot{text-align:center;margin-top:25px;font-size:12px;color:#8190a2}
+@media(max-width:620px){.wrap{width:min(100% - 24px,880px)}main{padding-top:16px}.hero{padding:24px 21px;border-radius:19px}.card{padding:23px 18px 25px;border-radius:18px}.small{display:none}}
+</style></head><body>
+<header><div class="wrap head"><div class="brand"><span class="mark" aria-hidden="true">教</span>教學原理</div><span class="small">2026 秋季課程 · 跨週次互評</span></div></header>
+<main class="wrap"><section class="hero"><div class="eyebrow">TEACHING PRINCIPLES · PEER FEEDBACK</div>
+<h1>看見好報告，也留下自己的學習足跡。</h1>
+<p>每週選一組報告，留下至少 30 字心得；當週報告的兩組免填，隔週可回顧自己的紀錄。</p>
+<div class="chips"><span class="chip">填學號與姓名</span><span class="chip">每週選 1 組</span><span class="chip">心得至少 30 字</span><span class="chip">當週報告免填</span><span class="chip">送出後不可修改</span></div></section>
+<section class="card"><h2>正在開啟互評頁面</h2>
+<p>填寫介面會保留原本的深藍色首頁、週次卡片與心得紀錄。為避免原先的空白頁問題，現在改成直接開啟 Apps Script，不再將它內嵌於 GitHub。</p>
+<a class="btn" href="https://script.google.com/macros/s/AKfycbw_CMxDIgfxnyxX1r8PY20Z-sSD0Gq-60e5B7ws99bk7mLxNMpUphwgQ86ulQDTVmmg6w/exec">進入互評頁面</a>
+<p class="small">若未自動進入，請點選上方按鈕。</p></section>
+<p class="foot">教學原理｜跨週次報告互評</p></main>
+<script>window.location.replace('https://script.google.com/macros/s/AKfycbw_CMxDIgfxnyxX1r8PY20Z-sSD0Gq-60e5B7ws99bk7mLxNMpUphwgQ86ulQDTVmmg6w/exec');</script>
 </body></html>
