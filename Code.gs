@@ -1,5 +1,5 @@
 /**
- * 教學原理互評系統 v5（2026 秋季）
+ * 教學原理互評系統 v5.2（2026 秋季）
  *
  * 關鍵修正：學生頁面改由 Apps Script HtmlService 提供，
  * 直接以 google.script.run 呼叫本程式，移除舊版跨網域 iframe 回傳逾時問題。
@@ -12,10 +12,10 @@
 const TP_SETTINGS = Object.freeze({
   timezone: 'Asia/Taipei',
   replies: '互評回覆',
-  roster: '學生名單',
+  roster: '互評正式名單2026', // 避免碰觸舊版「學生名單」
   summary: '統計總覽',
   spreadsheetProperty: 'TEACHING_PRINCIPLES_SHEET_2026',
-  release: '2026-11-23-v5'
+  release: '2026-11-23-v5.2'
 });
 const TP_WEEKS = [
   {id:'2026-11-23',open:'2026-11-22',end:'2026-11-24',label:'第一週',groups:[
@@ -63,7 +63,9 @@ const TP_STUDENTS = [
   {name:"朱凌潔",id:"g11217003",group:6},
   {name:"蕭明晏",id:"g11505007",group:6}
 ];
-const TP_NEW_HEADERS = ['提交時間','報告日期','週次','學號','姓名','獲選組別','報告主題','30字內心得','提交編號（防重送）'];
+const TP_NEW_HEADERS = ['提交時間','報告日期','週次','學號','姓名','獲選組別','報告主題','心得（至少30字）','提交編號（防重送）'];
+// 相容 v5.1 原有表頭；只更新欄名，不刪除或改動學生心得。
+const TP_PRIOR_NEW_HEADERS = ['提交時間','報告日期','週次','學號','姓名','獲選組別','報告主題','30字內心得','提交編號（防重送）'];
 const TP_OLD_HEADERS = ['提交時間','報告日期','週次','獲選組別','報告主題','30字內心得','提交編號（防重送）'];
 
 function doGet() {
@@ -81,7 +83,7 @@ function setup() {
   tpPrepareReplies_(ss.getSheetByName(TP_SETTINGS.replies)||ss.insertSheet(TP_SETTINGS.replies));
   tpPrepareRoster_(ss.getSheetByName(TP_SETTINGS.roster)||ss.insertSheet(TP_SETTINGS.roster));
   tpBuildSummary_(ss.getSheetByName(TP_SETTINGS.summary)||ss.insertSheet(TP_SETTINGS.summary));
-  Logger.log('v5 名單完成：34 人，6 組；第一週免評11人、第二週12人、第三週11人。');
+  Logger.log('v5.2 正式名單完成：34 人，6 組；第一週免評11人、第二週12人、第三週11人。舊「學生名單」保留。');
   Logger.log('試算表：'+ss.getUrl());
   return '名單與統計表已設定完成。';
 }
@@ -92,11 +94,15 @@ function tpPrepareReplies_(sheet) {
   } else {
     const head=sheet.getRange(1,1,1,Math.max(9,sheet.getLastColumn())).getDisplayValues()[0];
     const isNew=TP_NEW_HEADERS.every((t,i)=>head[i]===t);
+    const isPriorNew=TP_PRIOR_NEW_HEADERS.every((t,i)=>head[i]===t);
     const isOld=TP_OLD_HEADERS.every((t,i)=>head[i]===t);
-    if (!isNew && !isOld) throw new Error('「互評回覆」欄位不符；已停止設定，原作答未更動。');
+    if (!isNew && !isPriorNew && !isOld) throw new Error('「互評回覆」欄位不符；已停止設定，原作答未更動。');
     if (isOld) {
-      // 移入學號與姓名兩欄，原本七欄內容往後平移，不刪舊資料。
+      // 舊匿名版：只插入學號與姓名欄，保留原有心得及提交資料。
       sheet.insertColumnsBefore(4,2);
+    }
+    if (isPriorNew || isOld) {
+      // 舊版欄名「30字內心得」改為「心得（至少30字）」；歷史紀錄一律保留。
       sheet.getRange(1,1,1,9).setValues([TP_NEW_HEADERS]);
     }
   }
@@ -109,14 +115,14 @@ function tpPrepareReplies_(sheet) {
   [176,128,95,142,110,100,255,305,265].forEach((n,i)=>sheet.setColumnWidth(i+1,n));
 }
 
-/** 學生名單已有舊資料時依姓名補齊，不會清空已填學號。 */
+/** 另建專用「互評正式名單2026」，不修改既有「學生名單」。重複執行不會刪除已填學號。 */
 function tpPrepareRoster_(sheet) {
   if (sheet.getLastRow()===0) {
     sheet.getRange(1,1,1,6).setValues([['姓名','學號（正式名單）','組別','報告日期','報告主題','免評週次']]);
   } else {
     const head=sheet.getRange(1,1,1,2).getDisplayValues()[0];
     if (head[0]!=='姓名' || !['學號（教師可補，建議）','學號（正式名單）'].includes(head[1])) {
-      throw new Error('「學生名單」既有欄位不符；請保留舊表，請勿覆蓋姓名與學號。');
+      throw new Error('「互評正式名單2026」欄位不符；請勿清空此表，請教師檢查後重新執行。原有「學生名單」不受影響。');
     }
   }
   sheet.getRange(1,1,1,6).setValues([['姓名','學號（正式名單）','組別','報告日期','報告主題','免評週次']]);
@@ -126,7 +132,7 @@ function tpPrepareRoster_(sheet) {
   old.forEach((r,i)=>{
     const name=tpNormalizeName_(r[0]);
     if (!name) return;
-    if (names.has(name)) throw new Error('「學生名單」姓名重複：'+name+'，請教師先核對。');
+    if (names.has(name)) throw new Error('「互評正式名單2026」姓名重複：'+name+'，請教師先核對。');
     names.set(name,{row:i+2,id:tpNormalizeId_(r[1])});
   });
   const problems=TP_STUDENTS.filter(s=>names.has(s.name)&&names.get(s.name).id&&names.get(s.name).id!==tpNormalizeId_(s.id));
@@ -193,8 +199,8 @@ function submitPeerVote(payload) {
     const group=week.groups.find(g=>g.id===Number(payload.groupId));
     if(!group) throw new Error('請選擇該週的報告組別。');
     const comment=String(payload.comment==null?'':payload.comment).replace(/\s+/g,' ').trim();
-    if (Array.from(comment).length<1||Array.from(comment).length>30) {
-      throw new Error('請填寫 1 至 30 字的心得。');
+    if (Array.from(comment).length < 30) {
+      throw new Error('心得至少需填寫 30 字，請補充後再送出。');
     }
     const studentPresentWeek=TP_WEEKS.find(w=>w.groups.some(g=>g.id===student.group));
     if(studentPresentWeek.id===week.id) {
@@ -291,7 +297,7 @@ function checkSetup() {
   const studentSheet=ss.getSheetByName(TP_SETTINGS.roster);
   const names=studentSheet.getRange(2,1,studentSheet.getLastRow()-1,2).getDisplayValues();
   const valid=TP_STUDENTS.every(s=>names.some(r=>r[0]===s.name&&tpNormalizeId_(r[1])===tpNormalizeId_(s.id)));
-  if(!valid) throw new Error('Google Sheet 學生名單缺漏或學號不符，請執行 setup()。');
+  if(!valid) throw new Error('「互評正式名單2026」缺漏或學號不符，請執行 setup()。');
   Logger.log('檢查完成：'+TP_STUDENTS.length+' 人；第一週免評 11 人；第二週 12 人；第三週 11 人。');
-  return 'v5 已連結 '+ss.getName()+'；34 位學號姓名匹配。';
+  return 'v5.2 已連結 '+ss.getName()+'；34 位學號姓名匹配，舊名單未更動。';
 }

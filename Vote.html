@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#f5f7fb">
-<meta name="description" content="教學原理三週課堂報告互評：輸入學號姓名、每週選一組與30字心得，回顧自己的歷次回饋。">
+<meta name="description" content="教學原理三週課堂報告互評：輸入學號姓名、每週選一組並寫至少30字心得，回顧自己的歷次回饋。">
 <title>教學原理｜報告互評與心得回顧</title>
 <style>
 :root { --ink:#17304d; --muted:#667991; --line:#e3e9f3; --brand:#315bc5; --brand-dark:#21469f; --teal:#087f78; --paper:#ffffff; --page:#f5f7fb; --soft:#f1f5fc; --shadow:0 16px 48px rgba(18,42,77,.055); }
@@ -128,14 +128,14 @@ textarea { display:block; min-height:105px; resize:vertical; width:100%; border-
 <body>
 <header class="site-header"><div class="wrap header-inner">
   <div class="brand"><div class="brand-icon" aria-hidden="true">教</div><div>教學原理</div></div>
-  <div class="header-note">2026 秋季課程 · v5 · 正式名單核對</div>
+  <div class="header-note">2026 秋季課程 · v5.2 · 心得至少30字</div>
 </div></header>
 <main class="wrap">
   <section class="hero" aria-labelledby="page-title">
     <div class="eyebrow">TEACHING PRINCIPLES · PEER FEEDBACK</div>
     <h1 id="page-title">看見好報告，也留下自己的學習足跡。</h1>
-    <p>當週報告組員免填；其餘同學每週從兩組中選一組，寫下 30 字內心得，也能回顧自己先前的紀錄。</p>
-    <div class="chips"><span class="chip">填學號與姓名</span><span class="chip">每週選 1 組</span><span class="chip">心得 30 字內</span><span class="chip">報告當週免填</span><span class="chip">送出後不可修改</span></div>
+    <p>當週報告組員免填；其餘同學每週從兩組中選一組，寫下至少 30 字心得，也能回顧自己先前的紀錄。</p>
+    <div class="chips"><span class="chip">填學號與姓名</span><span class="chip">每週選 1 組</span><span class="chip">心得至少 30 字</span><span class="chip">報告當週免填</span><span class="chip">送出後不可修改</span></div>
   </section>
 
   <section id="identity-card" class="card" aria-labelledby="identity-title">
@@ -270,12 +270,12 @@ function renderWeekly(){
   html+=`<div class="choices">${groupCards(week,false)}</div><div class="notice"><strong>${st==='upcoming'?'尚未開放':'已截止'}</strong>
    ${st==='upcoming'?'報告前一天 00:00 才可填寫。':'本週已截止，不能補填或修改。'}</div>`;
  }else{
-  html+=`<p class="sub">選擇一組你認為本週報告得不錯的組別，並用 30 字內寫下心得。</p>
+  html+=`<p class="sub">選擇一組你認為本週報告得不錯的組別，並寫下至少 30 字心得（可超過 30 字）。</p>
    <form id="vote-form" novalidate>
     <label class="form-label" id="group-label">01　選擇一個報告組別</label>
     <div class="choices" role="radiogroup" aria-labelledby="group-label">${groupCards(week,true)}</div>
-    <div class="comment-head"><label class="form-label" for="vote-comment">02　寫下一句心得</label><span class="count" id="char-count">0 / 30 字</span></div>
-    <textarea id="vote-comment" placeholder="例如：步驟清楚，能連結真實教學情境" rows="3" aria-describedby="char-count"></textarea>
+    <div class="comment-head"><label class="form-label" for="vote-comment">02　寫下心得（至少 30 字）</label><span class="count" id="char-count">已輸入 0 字，還差 30 字</span></div>
+    <textarea id="vote-comment" placeholder="請具體描述這一組報告的優點，例如教學步驟是否清楚、教學案例是否適切，以及自己學到的內容（至少 30 字）。" rows="4" aria-describedby="char-count" minlength="30"></textarea>
     <div class="form-bottom"><span class="hint">每人每週最多一則，送出後不能修改。</span>
       <button class="btn" type="submit" id="submit-btn" disabled>送出本週互評</button></div>
     <div id="vote-message" class="status" role="status" aria-live="polite" hidden></div>
@@ -288,13 +288,11 @@ function renderWeekly(){
    state.choices[week.id]=Number(input.value);updateVoteButton();
  }));
  comment.addEventListener('input',()=>{
-   let chars=Array.from(comment.value);
-   if(chars.length>30){comment.value=chars.slice(0,30).join('');chars=chars.slice(0,30);}
    state.drafts[week.id]=comment.value;
-   $("char-count").textContent=chars.length+' / 30 字';updateVoteButton();
+   updateVoteButton();
  });
  form.addEventListener('submit',handleVote);
- $("char-count").textContent=Array.from(comment.value).length+' / 30 字';updateVoteButton();
+ updateVoteButton();
 }
 function renderHistory(){
  const box=$("history-panel");
@@ -319,6 +317,11 @@ function updateVoteButton(){
  const btn=$("submit-btn"),comment=$("vote-comment");if(!btn||!comment)return;
  const week=currentWeek(),selected=state.choices[week.id];
  const count=Array.from(comment.value.replace(/\s+/g,' ').trim()).length;
+ const indicator=$("char-count");
+ if(indicator){
+  indicator.textContent=count < 30 ? `已輸入 ${count} 字，還差 ${30-count} 字` : `已輸入 ${count} 字 ✓ 達到最低 30 字`;
+  indicator.style.color=count < 30 ? '#9b6119' : '#087f78';
+ }
  const lock=state.sending||!!state.pending;
  panel.querySelectorAll('input[name="selectedGroup"]').forEach(el=>el.disabled=lock);
  comment.disabled=lock;
@@ -326,7 +329,7 @@ function updateVoteButton(){
  else if(state.pending&&state.pending.action==='submit'){
   btn.disabled=false;btn.textContent='再次確認提交';
  }else{
-  btn.disabled=!(week.groups.some(g=>g.id===selected)&&count>=1&&count<=30&&weekStatus(week)==='open'&&!isExempt(week));
+  btn.disabled=!(week.groups.some(g=>g.id===selected)&&count>=30&&weekStatus(week)==='open'&&!isExempt(week));
   btn.textContent='送出本週互評';
  }
 }
@@ -405,8 +408,8 @@ function handleVote(event){
  if(ownRecord(week.id)){showMessage('vote-message','error','本週已提交，不可修改。');return;}
  if(weekStatus(week)!=='open'){showMessage('vote-message','error','本週尚未開放或已截止。');return;}
  const groupId=state.choices[week.id],comment=String(state.drafts[week.id]||'').replace(/\s+/g,' ').trim();
- if(!week.groups.some(g=>g.id===groupId)||Array.from(comment).length<1||Array.from(comment).length>30){
-  showMessage('vote-message','error','請選一組並填寫 1～30 字心得。');return;
+ if(!week.groups.some(g=>g.id===groupId)||Array.from(comment).length<30){
+  showMessage('vote-message','error','請選一組並填寫至少 30 字心得。');return;
  }
  const group=week.groups.find(g=>g.id===groupId);
  if(!window.confirm(`確定送出「第 ${group.id} 組 · ${group.topic}」的心得嗎？\n送出後無法修改。`))return;
